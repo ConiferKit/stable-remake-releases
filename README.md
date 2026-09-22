@@ -39,7 +39,9 @@ stable shell remove        # remove owned startup blocks
 
 Use `off` to disable review. Destination hosts must be installed. Handoffs carry visible user/assistant history and start with conservative permissions. Native tool approvals remain in force.
 
-Since rc.5, the native model menus show the complete authorized Stable catalog in Router → Subscription → API order, including ChatGPT models in Claude. Claude requires 2.1.242 or later; its Default row follows Stable's configured default and native organization restrictions still apply. Codex shows connection labels in row descriptions. Pi shows `stable-router`, `stable-subscription`, and `stable-api` badges, with the complete Stable scope independent of saved native filters. Pi 0.73.1 and 0.87.0 are tested.
+Since rc.5, the native model menus show the complete authorized Stable catalog in Router → Subscription → API order, including ChatGPT models in Claude. Claude requires 2.1.251 or later; its Default row follows Stable's configured default and native organization restrictions still apply. Codex shows connection labels in row descriptions. Pi shows `stable-router`, `stable-subscription`, and `stable-api` badges, with the complete Stable scope independent of saved native filters. Pi 0.73.1 and 0.87.0 are tested.
+
+Since rc.6, selecting a model with Claude `/model` keeps the same process, conversation, and permission mode. Stable refreshes context and output limits through private watched settings and waits for Claude to acknowledge them before the next inference request. An unsuccessful refresh keeps the session open and blocks inference until another model selection recovers it. Original user settings remain untouched.
 
 After updating, open a fresh `stable claude`, `stable codex`, or `stable pi` session and run `/model`. Active sessions are preserved on their original version. If ChatGPT subscription models are absent from `stable models` itself, run `codex login` first.
 
