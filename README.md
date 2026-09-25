@@ -6,10 +6,11 @@ Stable adds decision-only model routing, subscription/API selection, native harn
 curl -fsSL https://raw.githubusercontent.com/ConiferKit/stable-remake-releases/main/install.sh | sh
 ```
 
-Supports macOS/Linux on arm64/amd64. The installer verifies the archive checksum, installs `~/.local/bin/stable`, and adds reversible bash/zsh integration. Open a new shell or source `~/.zshrc` / `~/.bashrc`. To skip shell integration, use `| sh -s -- --no-shell`. To select another prefix, use `| sh -s -- --prefix /absolute/path`.
+Supports macOS/Linux on arm64/amd64. The installer verifies the archive checksum, installs `~/.local/bin/stable`, and adds reversible bash/zsh integration. If no Conifer API key is configured, it opens [the Conifer console](https://conifer.build/console#/keys) and asks you to paste one (hidden input; press Enter to skip, since subscriptions work without a key). Open a new shell or source `~/.zshrc` / `~/.bashrc`. To skip shell integration, use `| sh -s -- --no-shell`; to skip the key prompt, `--no-login`. To select another prefix, use `| sh -s -- --prefix /absolute/path`.
 
 ```sh
-stable login --stdin       # pipe the gateway API key; never put it in arguments
+stable login               # open the console, paste a key (hidden), verify, save
+stable login --stdin       # or pipe the key; never put it in arguments
 stable codex --model beta-router
 stable claude --model router
 stable report
@@ -44,6 +45,8 @@ Since rc.5, the native model menus show the complete authorized Stable catalog i
 Since rc.6, selecting a model with Claude `/model` keeps the same process, conversation, and permission mode. Stable refreshes context and output limits through private watched settings and waits for Claude to acknowledge them before the next inference request. An unsuccessful refresh keeps the session open and blocks inference until another model selection recovers it. Original user settings remain untouched.
 
 After updating, open a fresh `stable claude`, `stable codex`, or `stable pi` session and run `/model`. Active sessions are preserved on their original version. If ChatGPT subscription models are absent from `stable models` itself, run `codex login` first.
+
+Since rc.7, an exhausted gateway balance or missing key never blocks subscription use: router turns fall back to a subscription model at no fee, Claude subscriptions work without the gateway catalog, and Claude Code / Codex show their own usage-limit and reset messages. `claude --continue/--resume`, piped output (`claude | tee log`), and symlinked dotfiles now work through Stable.
 
 ## Usage and billing
 

@@ -4,11 +4,14 @@ set -eu
 repo='https://github.com/ConiferKit/stable-remake-releases/releases'
 prefix="${STABLE_PREFIX:-$HOME/.local}"
 shell_setup=1
+key_setup=1
+case "${STABLE_NO_LOGIN:-}" in 1|true|yes) key_setup=0;; esac
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --prefix) [ "$#" -ge 2 ] || { echo 'missing --prefix value' >&2; exit 2; }; prefix=$2; shift 2;;
     --no-shell) shell_setup=0; shift;;
-    *) echo 'usage: install.sh [--prefix DIR] [--no-shell]' >&2; exit 2;;
+    --no-login) key_setup=0; shift;;
+    *) echo 'usage: install.sh [--prefix DIR] [--no-shell] [--no-login]' >&2; exit 2;;
   esac
 done
 case "$prefix" in /*) ;; *) echo 'installation prefix must be absolute' >&2; exit 2;; esac
@@ -36,6 +39,17 @@ tar -xzf "$work/$name.tar.gz" -C "$work"
 "$work/$name/stable" install --prefix "$prefix"
 if [ "$shell_setup" -eq 1 ]; then "$prefix/bin/stable" shell install; fi
 printf '\nStable %s installed at %s/bin/stable\n' "$version" "$prefix"
-printf 'Add this to your shell configuration if needed: export PATH="%s/bin:$PATH"\n' "$prefix"
-printf 'Next: stable login --stdin, then stable codex or stable claude.\n'
+# curl | sh keeps stdin on the download pipe; the key prompt uses the
+# terminal directly, and is skipped when there is none (CI, provisioning).
+if [ "$key_setup" -eq 1 ] && ( : </dev/tty ) 2>/dev/null; then
+  "$prefix/bin/stable" login --if-missing </dev/tty >/dev/tty 2>&1 || printf 'Conifer API key not saved; run: stable login\n'
+elif ! "$prefix/bin/stable" login --if-missing </dev/null >/dev/null 2>&1; then
+  printf 'Add a Conifer API key any time with: stable login\n'
+fi
+if [ "$shell_setup" -eq 1 ]; then
+  printf 'Open a new terminal (or source your shell startup file), then run claude, codex, or pi as usual.\n'
+else
+  printf 'Add this to your shell configuration if needed: export PATH="%s/bin:$PATH"\n' "$prefix"
+  printf 'Then run stable claude, stable codex, or stable pi.\n'
+fi
 printf 'Subscription execution has no Stable usage fee. Router decisions and explicitly selected API models are billed by the gateway.\n'
