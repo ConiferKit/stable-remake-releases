@@ -45,6 +45,8 @@ Since rc.6, selecting a model with Claude `/model` keeps the same process, conve
 
 After updating, open a fresh `stable claude`, `stable codex`, or `stable pi` session and run `/model`. Active sessions are preserved on their original version. If ChatGPT subscription models are absent from `stable models` itself, run `codex login` first.
 
+Since rc.10, every host uses each model's real context window: Claude models above 200K (Opus 5.5, Fable 5.1, Sonnet 5) get their full 1M window in Claude Code, shown as `MODEL[1m]`; Codex, Pi, and `beta-router` get the catalog's window too. Routed turns may use up to 64K output tokens, clamped to the chosen model. Models whose window is below 64,000 tokens are hidden automatically, because a coding host's own prompt already takes 15-20K tokens; `stable models` lists them under `hidden_small_context`.
+
 Since rc.9, model lists show `beta-router` (the default) followed by ranked subscription and API models; promoted models are marked "Suggested" and can be adjusted with `~/.stable-remake/rankings.json` (`{"subscription": [...], "api": [...]}`, exact IDs or globs). In interactive sessions, a routed turn starts with a line such as `↳ beta-router → glm-5.3-flash · API`; it is shown to you only. `codex resume --last` and `codex resume` also find sessions started without Stable and continue them through Stable. The reviewer is not part of this release.
 
 After installation, ordinary `claude`, `codex`, and `pi` in bash/zsh use Stable by default; open a new terminal once. Since rc.8, if the Stable launcher is missing these commands say so (with the reinstall command) and run natively instead of silently skipping Stable, and `stable uninstall` removes the integration it installed.
