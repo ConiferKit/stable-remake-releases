@@ -1,6 +1,6 @@
 # Stable Remake downloads
 
-Stable adds decision-only model routing, subscription/API selection, native harness switching, independent review, and local usage reports to Claude Code, Codex, and Pi. Install the native hosts you want to use separately. No Palm, Conifer CLI, Go, or database server is needed.
+Stable adds decision-only model routing, subscription/API selection, native harness switching, and local usage reports to Claude Code, Codex, and Pi. Install the native hosts you want to use separately. No Palm, Conifer CLI, Go, or database server is needed.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/ConiferKit/stable-remake-releases/main/install.sh | sh
@@ -12,7 +12,7 @@ Supports macOS/Linux on arm64/amd64. The installer verifies the archive checksum
 stable login               # open the console, paste a key (hidden), verify, save
 stable login --stdin       # or pipe the key; never put it in arguments
 stable codex --model beta-router
-stable claude --model router
+stable claude --model beta-router
 stable report
 stable report --all --json
 stable update --check
@@ -36,15 +36,16 @@ stable shell remove        # remove owned startup blocks
 |---|---|---|
 | Model | `/model` picker | `/model` |
 | Harness | `$stable:harness claude` | `/harness codex` |
-| Reviewer | `$stable:reviewer codex` | `/reviewer codex` |
 
-Use `off` to disable review. Destination hosts must be installed. Handoffs carry visible user/assistant history and start with conservative permissions. Native tool approvals remain in force.
+Destination hosts must be installed. Handoffs carry visible user/assistant history and start with conservative permissions. Native tool approvals remain in force.
 
 Since rc.5, the native model menus show the complete authorized Stable catalog in Router → Subscription → API order, including ChatGPT models in Claude. Claude requires 2.1.251 or later; its Default row follows Stable's configured default and native organization restrictions still apply. Codex shows connection labels in row descriptions. Pi shows `stable-router`, `stable-subscription`, and `stable-api` badges, with the complete Stable scope independent of saved native filters. Pi 0.73.1 and 0.87.0 are tested.
 
 Since rc.6, selecting a model with Claude `/model` keeps the same process, conversation, and permission mode. Stable refreshes context and output limits through private watched settings and waits for Claude to acknowledge them before the next inference request. An unsuccessful refresh keeps the session open and blocks inference until another model selection recovers it. Original user settings remain untouched.
 
 After updating, open a fresh `stable claude`, `stable codex`, or `stable pi` session and run `/model`. Active sessions are preserved on their original version. If ChatGPT subscription models are absent from `stable models` itself, run `codex login` first.
+
+Since rc.9, model lists show `beta-router` (the default) followed by ranked subscription and API models; promoted models are marked "Suggested" and can be adjusted with `~/.stable-remake/rankings.json` (`{"subscription": [...], "api": [...]}`, exact IDs or globs). In interactive sessions, a routed turn starts with a line such as `↳ beta-router → glm-5.3-flash · API`; it is shown to you only. `codex resume --last` and `codex resume` also find sessions started without Stable and continue them through Stable. The reviewer is not part of this release.
 
 After installation, ordinary `claude`, `codex`, and `pi` in bash/zsh use Stable by default; open a new terminal once. Since rc.8, if the Stable launcher is missing these commands say so (with the reinstall command) and run natively instead of silently skipping Stable, and `stable uninstall` removes the integration it installed.
 
