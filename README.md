@@ -46,6 +46,8 @@ Since rc.6, selecting a model with Claude `/model` keeps the same process, conve
 
 After updating, open a fresh `stable claude`, `stable codex`, or `stable pi` session and run `/model`. Active sessions are preserved on their original version. If ChatGPT subscription models are absent from `stable models` itself, run `codex login` first.
 
+After installation, ordinary `claude`, `codex`, and `pi` in bash/zsh use Stable by default; open a new terminal once. Since rc.8, if the Stable launcher is missing these commands say so (with the reinstall command) and run natively instead of silently skipping Stable, and `stable uninstall` removes the integration it installed.
+
 Since rc.7, an exhausted gateway balance or missing key never blocks subscription use: router turns fall back to a subscription model at no fee, Claude subscriptions work without the gateway catalog, and Claude Code / Codex show their own usage-limit and reset messages. `claude --continue/--resume`, piped output (`claude | tee log`), and symlinked dotfiles now work through Stable.
 
 ## Usage and billing
